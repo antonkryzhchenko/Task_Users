@@ -1,18 +1,17 @@
-import UserItem from "./UserItem";
 import { Link } from "react-router-dom";
 
 const UsersList = (props) => {
     const {users} = props;
 
-    const allUsers = users.map(user => 
-        <UserItem key={user.id} {...user} />
-        )
-
     return (
-        <div>
-            <h2>User List:</h2>
-            {allUsers}
-        </div>
+        <>
+        {users &&
+            users.map(user => (
+                <Link key={user.id} to={`/Task_Users/${user.id}`}>
+                    <h2>{user.name}</h2>
+                </Link>
+            ))}
+        </>
     )
 }
 export default UsersList;

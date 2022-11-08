@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import axios from "axios";
 
 import UsersList from "./components/UsersList";
+import UserItem from "./components/UserItem";
 
 import Search from "./components/Search";
 
@@ -44,8 +45,11 @@ const App = () => {
     <>
     <div>
     <Search onChange={(e) => setInputValue(e.target.value)} />  
-    <UsersList users={filteredUsers ? filteredUsers : users} />
     </div>
+    <Routes>
+        <Route path='/Task_users' element={<UsersList users={filteredUsers ? filteredUsers : users}/>} />
+        <Route path='/Task_users/:id' element={<UserItem />} />
+      </Routes>
     </>
   )
 }
