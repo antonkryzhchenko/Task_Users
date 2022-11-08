@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import axios from "axios";
 
-function App() {
+import UsersList from "./components/UsersList";
+
+import Search from "./components/Search";
+
+const url = 'https://jsonplaceholder.typicode.com/users'
+
+const App = () => {
+
+  const [users, setUsers] = useState(null);
+  const [inputValue, setInputValue] = useState();
+
+  useEffect(() => {
+    axios.get(`${url}`)
+    .then((response) => {
+      const users = response.data;
+      console.log(users);
+      setUsers(users);
+    })
+  }, []);
+
+  const filterUsers = () => {
+    if (users) {
+      let usersCopy = [...users];
+      if (inputValue) {
+        let usersFilter = usersCopy.filter((user) => {
+          return user.name.toLowerCase().includes(inputValue.toLowerCase());
+        })
+        return usersFilter;
+      }
+    }
+  }
+
+  const filteredUsers = filterUsers();
+
+  if (!users) {
+    return <h1>Loading...</h1>
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <div>
+    <Search onChange={(e) => setInputValue(e.target.value)} />  
+    <UsersList users={filteredUsers ? filteredUsers : users} />
     </div>
-  );
+    </>
+  )
 }
-
 export default App;
